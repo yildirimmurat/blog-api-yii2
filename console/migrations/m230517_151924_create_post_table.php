@@ -14,7 +14,14 @@ class m230517_151924_create_post_table extends Migration
     {
         $this->createTable('{{%post}}', [
             'id' => $this->primaryKey(),
+            'title' => $this->string(512),
+            'body' => 'LONGTEXT',
+            'created_at' => $this->integer(),
+            'updated_at' => $this->integer(),
+            'created_by' => $this->integer()
         ]);
+
+        $this->addForeignKey('FK_post_user_created_by', '{{%post}}', 'created_by', '{{%user}}', 'id');
     }
 
     /**
@@ -22,6 +29,7 @@ class m230517_151924_create_post_table extends Migration
      */
     public function safeDown()
     {
+        $this->dropForeignKey('FK_post_user_created_by', '{{%post}}');
         $this->dropTable('{{%post}}');
     }
 }
