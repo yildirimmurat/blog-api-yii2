@@ -7,7 +7,7 @@ use yii\db\ActiveQuery;
 
 class Post extends \common\models\Post
 {
-    public function fields()
+    public function fields(): array
     {
         return [
             'id',
@@ -16,13 +16,14 @@ class Post extends \common\models\Post
         ];
     }
 
-    public function extraFields()
+    public function extraFields(): array
     {
         return [
-            'comments',
             'created_at',
             'crated_by',
-            'updated_at'
+            'updated_at',
+            'comments',
+            'createdBy'
         ];
     }
 
@@ -34,5 +35,15 @@ class Post extends \common\models\Post
     public function getComments(): CommentQuery|ActiveQuery
     {
         return $this->hasMany(Comment::class, ['post_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[CreatedBy]].
+     *
+     * @return ActiveQuery|\common\models\query\UserQuery
+     */
+    public function getCreatedBy(): \common\models\query\UserQuery|ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'created_by']);
     }
 }
