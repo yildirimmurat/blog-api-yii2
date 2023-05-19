@@ -17,7 +17,7 @@ class m230519_064419_create_comment_table extends Migration
             'title' => $this->string(512),
             'body' => $this->text(),
             'post_id' => $this->integer(),
-            'crated_at' => $this->integer(),
+            'created_at' => $this->integer(),
             'updated_at' => $this->integer(),
             'created_by' => $this->integer()
         ]);

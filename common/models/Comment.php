@@ -2,9 +2,12 @@
 
 namespace common\models;
 
-use Yii;
+use common\models\query\CommentQuery;
+use common\models\query\PostQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%comment}}".
@@ -20,17 +23,24 @@ use yii\behaviors\TimestampBehavior;
  * @property User $createdBy
  * @property Post $post
  */
-class Comment extends \yii\db\ActiveRecord
+class Comment extends ActiveRecord
 {
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%comment}}';
     }
 
-    public function behaviors()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function behaviors(): array
     {
         return [
             TimestampBehavior::class,
@@ -43,11 +53,13 @@ class Comment extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            [['title', 'body'], 'required'],
+            [['title', 'body', 'post_id'], 'required'],
             [['body'], 'string'],
             [['post_id', 'created_at', 'updated_at', 'created_by'], 'integer'],
             [['title'], 'string', 'max' => 512],
@@ -58,8 +70,10 @@ class Comment extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
+     *
+     * @return array|string[]
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -75,9 +89,9 @@ class Comment extends \yii\db\ActiveRecord
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return \common\models\query\UserQuery|ActiveQuery
      */
-    public function getCreatedBy()
+    public function getCreatedBy(): \common\models\query\UserQuery|ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'created_by']);
     }
@@ -85,19 +99,19 @@ class Comment extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Post]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\PostQuery
+     * @return PostQuery|ActiveQuery
      */
-    public function getPost()
+    public function getPost(): PostQuery|ActiveQuery
     {
         return $this->hasOne(Post::class, ['id' => 'post_id']);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\CommentQuery the active query used by this AR class.
+     * @return CommentQuery the active query used by this AR class.
      */
-    public static function find()
+    public static function find(): CommentQuery
     {
-        return new \common\models\query\CommentQuery(get_called_class());
+        return new CommentQuery(get_called_class());
     }
 }

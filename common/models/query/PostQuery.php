@@ -2,12 +2,15 @@
 
 namespace common\models\query;
 
+use yii\db\ActiveQuery;
+use common\models\Post;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Post]].
  *
  * @see \common\models\Post
  */
-class PostQuery extends \yii\db\ActiveQuery
+class PostQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,18 +19,18 @@ class PostQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Post[]|array
+     * @return Post[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Post|array|null
+     * @return Post|array|null
      */
-    public function one($db = null)
+    public function one($db = null): Post|array|null
     {
         return parent::one($db);
     }

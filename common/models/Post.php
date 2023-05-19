@@ -2,9 +2,12 @@
 
 namespace common\models;
 
-use Yii;
+use common\models\query\CommentQuery;
+use common\models\query\PostQuery;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%post}}".
@@ -19,17 +22,24 @@ use yii\behaviors\TimestampBehavior;
  * @property Comment[] $comments
  * @property User $createdBy
  */
-class Post extends \yii\db\ActiveRecord
+class Post extends ActiveRecord
 {
     /**
      * {@inheritdoc}
+     *
+     * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return '{{%post}}';
     }
 
-    public function behaviors()
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function behaviors(): array
     {
         return [
             TimestampBehavior::class,
@@ -42,8 +52,10 @@ class Post extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
+     *
+     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['title', 'body'], 'required'],
@@ -56,8 +68,10 @@ class Post extends \yii\db\ActiveRecord
 
     /**
      * {@inheritdoc}
+     *
+     * @return array|string[]
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',
@@ -72,9 +86,9 @@ class Post extends \yii\db\ActiveRecord
     /**
      * Gets query for [[Comments]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\CommentQuery
+     * @return CommentQuery|ActiveQuery
      */
-    public function getComments()
+    public function getComments(): CommentQuery|ActiveQuery
     {
         return $this->hasMany(Comment::class, ['post_id' => 'id']);
     }
@@ -82,19 +96,19 @@ class Post extends \yii\db\ActiveRecord
     /**
      * Gets query for [[CreatedBy]].
      *
-     * @return \yii\db\ActiveQuery|\common\models\query\UserQuery
+     * @return ActiveQuery|\common\models\query\UserQuery
      */
-    public function getCreatedBy()
+public function getCreatedBy(): \common\models\query\UserQuery|ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'created_by']);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\query\PostQuery the active query used by this AR class.
+     * @return PostQuery the active query used by this AR class.
      */
-    public static function find()
+    public static function find(): PostQuery
     {
-        return new \common\models\query\PostQuery(get_called_class());
+        return new PostQuery(get_called_class());
     }
 }

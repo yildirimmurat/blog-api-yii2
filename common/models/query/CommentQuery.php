@@ -2,12 +2,15 @@
 
 namespace common\models\query;
 
+use yii\db\ActiveQuery;
+use common\models\Comment;
+
 /**
  * This is the ActiveQuery class for [[\common\models\Comment]].
  *
  * @see \common\models\Comment
  */
-class CommentQuery extends \yii\db\ActiveQuery
+class CommentQuery extends ActiveQuery
 {
     /*public function active()
     {
@@ -16,18 +19,18 @@ class CommentQuery extends \yii\db\ActiveQuery
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Comment[]|array
+     * @return Comment[]|array
      */
-    public function all($db = null)
+    public function all($db = null): array
     {
         return parent::all($db);
     }
 
     /**
      * {@inheritdoc}
-     * @return \common\models\Comment|array|null
+     * @return Comment|array|null
      */
-    public function one($db = null)
+    public function one($db = null): Comment|array|null
     {
         return parent::one($db);
     }
