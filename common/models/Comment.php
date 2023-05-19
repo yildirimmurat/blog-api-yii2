@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 
 /**
  * This is the model class for table "{{%comment}}".
@@ -11,7 +13,7 @@ use Yii;
  * @property string|null $title
  * @property string|null $body
  * @property int|null $post_id
- * @property int|null $crated_at
+ * @property int|null $created_at
  * @property int|null $updated_at
  * @property int|null $created_by
  *
@@ -28,14 +30,26 @@ class Comment extends \yii\db\ActiveRecord
         return '{{%comment}}';
     }
 
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
+            [
+                'class' => BlameableBehavior::class,
+                'updatedByAttribute' => false,
+            ]
+        ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
+            [['title', 'body'], 'required'],
             [['body'], 'string'],
-            [['post_id', 'crated_at', 'updated_at', 'created_by'], 'integer'],
+            [['post_id', 'created_at', 'updated_at', 'created_by'], 'integer'],
             [['title'], 'string', 'max' => 512],
             [['created_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['created_by' => 'id']],
             [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
@@ -52,7 +66,7 @@ class Comment extends \yii\db\ActiveRecord
             'title' => 'Title',
             'body' => 'Body',
             'post_id' => 'Post ID',
-            'crated_at' => 'Crated At',
+            'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',
         ];

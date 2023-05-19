@@ -43,7 +43,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                ['class' => \yii\rest\UrlRule::class, 'controller' => 'post']
+                ['class' => \yii\rest\UrlRule::class, 'controller' => ['post', 'comment']]
             ],
         ],
     ],

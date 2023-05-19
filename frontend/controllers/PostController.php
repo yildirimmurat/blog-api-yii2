@@ -3,8 +3,9 @@
 namespace frontend\controllers;
 
 use yii\rest\ActiveController;
+use \frontend\resource\Post;
 
 class PostController extends ActiveController
 {
-    public $modelClass = \frontend\resource\Post::class;
+    public $modelClass = Post::class;
 }
