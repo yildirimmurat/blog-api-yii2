@@ -4,9 +4,6 @@ namespace frontend\controllers;
 
 use frontend\resource\Comment;
 use yii\data\ActiveDataProvider;
-use yii\filters\auth\HttpBearerAuth;
-use yii\rest\ActiveController;
-use yii\web\ForbiddenHttpException;
 
 class CommentController extends ActiveController
 {
@@ -25,31 +22,5 @@ class CommentController extends ActiveController
         return new ActiveDataProvider([
             'query' => $this->modelClass::find()->andWhere(['post_id' => \Yii::$app->request->get('postId')])
         ]);
-    }
-
-    public function behaviors(): array
-    {
-        $behaviors = parent::behaviors();
-
-        $behaviors['authenticator']['only'] = ['create','update','delete'];
-        $behaviors['authenticator']['authMethods'] = [
-            HttpBearerAuth::class
-        ];
-
-        return $behaviors;
-    }
-
-    /**
-     * @param $action
-     * @param $model
-     * @param $params
-     * @return void
-     * @throws ForbiddenHttpException
-     */
-    public function checkAccess($action, $model = null, $params = []): array
-    {
-        if (in_array($action, ['update', 'delete']) && $model->created_by !== \Yii::$app->user->id) {
-            throw new ForbiddenHttpException('You do not have permission to change this record');
-        }
     }
 }
