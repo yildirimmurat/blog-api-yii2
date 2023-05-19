@@ -5,6 +5,7 @@ namespace frontend\controllers;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 use \frontend\resource\Post;
+use yii\web\ForbiddenHttpException;
 
 class PostController extends ActiveController
 {
@@ -20,5 +21,19 @@ class PostController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    /**
+     * @param $action
+     * @param $model
+     * @param $params
+     * @return void
+     * @throws ForbiddenHttpException
+     */
+    public function checkAccess($action, $model = null, $params = []): array
+    {
+        if (in_array($action, ['update', 'delete']) && $model->created_by !== \Yii::$app->user->id) {
+            throw new ForbiddenHttpException('You do not have permission to change this record');
+        }
     }
 }

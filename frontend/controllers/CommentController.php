@@ -6,6 +6,7 @@ use frontend\resource\Comment;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
+use yii\web\ForbiddenHttpException;
 
 class CommentController extends ActiveController
 {
@@ -36,5 +37,19 @@ class CommentController extends ActiveController
         ];
 
         return $behaviors;
+    }
+
+    /**
+     * @param $action
+     * @param $model
+     * @param $params
+     * @return void
+     * @throws ForbiddenHttpException
+     */
+    public function checkAccess($action, $model = null, $params = []): array
+    {
+        if (in_array($action, ['update', 'delete']) && $model->created_by !== \Yii::$app->user->id) {
+            throw new ForbiddenHttpException('You do not have permission to change this record');
+        }
     }
 }
